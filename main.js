@@ -1,5 +1,6 @@
 var img = "";
 var object_status = "";
+var objects= [];
 
 function setup() {
     canvas = createCanvas(640, 420);
@@ -21,6 +22,7 @@ function gotResult(error, results) {
         console.error(error);
     } else {
         console.log(results);
+        objects = results;
     }
 }
 
@@ -31,17 +33,19 @@ function preload() {
 function draw() {
     image(img, 0, 0, 640, 420);
 
-    fill("black");
-    textSize(15);
-    text("Dog", 45, 75);
-    noFill();
-    stroke("#003333");
-    rect(30, 60, 450, 350);
+   if (object_status != "") {
+
+    for (var i=0; i < objects.length; i++) {
+
+        document.getElementById("status").innerHTML = "Status: Object Detected";
 
     fill("black");
+    percent = floor(objects[i].confidence * 100);
     textSize(15);
-    text("Cat", 305, 85);
+    text(objects[i].label + " " + percent + "%", objects[i].x + 15, objects[i].y + 15);
     noFill();
     stroke("#003333");
-    rect(300, 65, 300, 330);
+    rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
+    }
+   }
 }
